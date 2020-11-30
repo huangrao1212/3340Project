@@ -1,0 +1,9 @@
+
+```{r}
+library(readr)
+datasetfull <- read_csv("/Users/richard/Desktop/Nutrition__Physical_Activity__and_Obesity_-_Behavioral_Risk_Factor_Surveillance_System.csv")
+```
+```{r}
+keep<-c('LocationDesc','Data_Value','Age(years)','Education','Gender','Income','Race/Ethnicity')
+datareduce<-subset(datasetfull, select=keep)
+```
