@@ -5,7 +5,7 @@ output: html_document
 
 ```{r}
 library(readr)
-datasetfull <- read_csv("E:/Google drive/STAT3340/Project/archive/Nutrition__Physical_Activity__and_Obesity_-_Behavioral_Risk_Factor_Surveillance_System.csv")
+cost <- read_csv("E:/Google drive/STAT3340/Project/insurance.csv")
 ```
 
 
