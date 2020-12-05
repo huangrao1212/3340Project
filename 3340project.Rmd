@@ -1,9 +1,32 @@
 
 ```{r}
 library(readr)
-datasetfull <- read_csv("/Users/richard/Desktop/Nutrition__Physical_Activity__and_Obesity_-_Behavioral_Risk_Factor_Surveillance_System.csv")
+datasetfull <- read_csv("/Users/richard/Documents/study/20fall/3340/project/insurance.csv")
 ```
 ```{r}
-keep<-c('LocationDesc','Data_Value','Age(years)','Education','Gender','Income','Race/Ethnicity')
-datareduce<-subset(datasetfull, select=keep)
+keep<-c('age','bmi','children','charges')
+num_data<-subset(datasetfull, select=keep)
+cor(num_data)
+```
+```{r}
+pairs(~age+bmi+children+charges,data=datasetfull)
+```
+
+```{r}
+datasetfull[nrow(datasetfull) + 1,] <- list(22,"female",23.71,0,"no","northeast",5503.7768)
+```
+
+```{r}
+unique(datasetfull$region)
+```
+
+```{r}
+datasetfull$sex=as.factor(datasetfull$sex)
+datasetfull$sex_male <- ifelse(datasetfull$sex == "male", 1, 0)
+datasetfull$sex_female <- ifelse(datasetfull$sex == "female", 1, 0)
+datasetfull$region_southwest <- ifelse(datasetfull$region == "southwest", 1, 0)
+datasetfull$region_southeast <- ifelse(datasetfull$region == "southeast", 1, 0)
+datasetfull$region_northwest <- ifelse(datasetfull$region == "northwest", 1, 0)
+datasetfull$region_northeast <- ifelse(datasetfull$region == "northeast", 1, 0)
+datasetfull <- subset(datasetfull, select = -c(sex, region))
 ```
