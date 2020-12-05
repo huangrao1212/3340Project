@@ -18,6 +18,25 @@ pairs(~age+bmi+children+charges,data=datasetfull)
 ```
 
 ```{r}
+install.packages("tidyverse")
+library(tidyverse)
+ggplot(data = datasetfull, aes(x = sex, y = charges)) + geom_point()
+```
+
+```{r}
+ggplot(data = datasetfull, aes(x = children, y = charges)) + geom_point()
+```
+
+```{r}
+ggplot(data = datasetfull, aes(x = smoker, y = charges)) + geom_point()
+```
+
+```{r}
+ggplot(data = datasetfull, aes(x = region, y = charges)) + geom_point()
+```
+
+
+```{r}
 datasetfull[nrow(datasetfull) + 1,] <- list(22,"female",23.71,0,"no","northeast",5503.7768)
 ```
 
