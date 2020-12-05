@@ -1,6 +1,11 @@
+```{r}
+install.packages("ggplot2")
+install.packages("olsrr")
+```
 
 ```{r}
 library(readr)
+library(ggplot2)
 datasetfull <- read_csv("/Users/richard/Documents/study/20fall/3340/project/insurance.csv")
 ```
 ```{r}
