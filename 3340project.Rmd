@@ -5,7 +5,6 @@ install.packages("olsrr")
 
 ```{r}
 library(readr)
-library(ggplot2)
 datasetfull <- read_csv("/Users/richard/Documents/study/20fall/3340/project/insurance.csv")
 ```
 ```{r}
@@ -26,12 +25,35 @@ unique(datasetfull$region)
 ```
 
 ```{r}
-datasetfull$sex=as.factor(datasetfull$sex)
+datasetfull$sex<-as.factor(datasetfull$sex)
+datasetfull$region<-as.factor(datasetfull$region)
+datasetfull$smoker<-as.factor(datasetfull$smoker)
 datasetfull$sex_male <- ifelse(datasetfull$sex == "male", 1, 0)
 datasetfull$sex_female <- ifelse(datasetfull$sex == "female", 1, 0)
 datasetfull$region_southwest <- ifelse(datasetfull$region == "southwest", 1, 0)
 datasetfull$region_southeast <- ifelse(datasetfull$region == "southeast", 1, 0)
 datasetfull$region_northwest <- ifelse(datasetfull$region == "northwest", 1, 0)
 datasetfull$region_northeast <- ifelse(datasetfull$region == "northeast", 1, 0)
-datasetfull <- subset(datasetfull, select = -c(sex, region))
+datasetfull$smoker_yes <- ifelse(datasetfull$smoker == "yes", 1, 0)
+datasetfull$smoker_no <- ifelse(datasetfull$smoker == "no", 1, 0)
+datasetfull$smoker <- ifelse(datasetfull$smoker == "yes", 1, 0)
+datasetfull <- subset(datasetfull, select = -c(sex, region, smoker))
+```
+
+
+
+```{r}
+nullmodel<-lm(charges~1,data=datasetfull)
+fullmodel=lm(charges~sex_male+sex_female+region_southwest+region_southeast+region_northwest+region_northeast+age+bmi+children+smoker_yes+smoker_no,data=datasetfull)
+step1=step(nullmodel,scope=list(lower=nullmodel, upper=fullmodel), direction="forward")
+summary(step1)
+```
+
+```{r}
+fullmodel2=lm(charges~region_southwest+region_southeast+region_northwest+region_northeast+age+bmi+children+sex_male*smoker_yes+sex_female*smoker_no+sex_male*smoker_no+sex_male*smoker_yes,data=datasetfull)
+step2=step(fullmodel2,direction="backward")
+summary(step2)
+```
+```{r}
+anova(step1,step2)
 ```
