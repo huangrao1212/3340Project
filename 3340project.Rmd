@@ -5,7 +5,7 @@ install.packages("olsrr")
 
 ```{r}
 library(readr)
-datasetfull <- read_csv("/Users/richard/Documents/study/20fall/3340/project/insurance.csv")
+datasetfull <- read_csv("insurance.csv")
 ```
 ```{r}
 keep<-c('age','bmi','children','charges')
@@ -18,7 +18,7 @@ pairs(~age+bmi+children+charges,data=datasetfull)
 
 ```{r}
 install.packages("tidyverse")
-library(tidyverse)
+library(ggplot2)
 ggplot(data = datasetfull, aes(x = sex, y = charges)) + geom_point()
 ```
 
@@ -55,7 +55,6 @@ datasetfull$region_northwest <- ifelse(datasetfull$region == "northwest", 1, 0)
 datasetfull$region_northeast <- ifelse(datasetfull$region == "northeast", 1, 0)
 datasetfull$smoker_yes <- ifelse(datasetfull$smoker == "yes", 1, 0)
 datasetfull$smoker_no <- ifelse(datasetfull$smoker == "no", 1, 0)
-datasetfull$smoker <- ifelse(datasetfull$smoker == "yes", 1, 0)
 datasetfull <- subset(datasetfull, select = -c(sex, region, smoker))
 ```
 
@@ -64,7 +63,7 @@ datasetfull <- subset(datasetfull, select = -c(sex, region, smoker))
 ```{r}
 nullmodel<-lm(charges~1,data=datasetfull)
 fullmodel=lm(charges~sex_male+sex_female+region_southwest+region_southeast+region_northwest+region_northeast+age+bmi+children+smoker_yes+smoker_no,data=datasetfull)
-step1=step(nullmodel,scope=list(lower=nullmodel, upper=fullmodel), direction="forward")
+step1=step(fullmodel, direction="backward")
 summary(step1)
 ```
 
