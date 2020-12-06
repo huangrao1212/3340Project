@@ -19,19 +19,19 @@ pairs(~age+bmi+children+charges,data=datasetfull)
 ```{r}
 install.packages("tidyverse")
 library(ggplot2)
-ggplot(data = datasetfull, aes(x = sex, y = charges)) + geom_point()
+ggplot(data = datasetfull, aes(x = sex, y = charges)) + geom_boxplot()
 ```
 
 ```{r}
-ggplot(data = datasetfull, aes(x = children, y = charges)) + geom_point()
+ggplot(data = datasetfull, aes(x = as.factor(children), y = charges)) + geom_boxplot()
 ```
 
 ```{r}
-ggplot(data = datasetfull, aes(x = smoker, y = charges)) + geom_point()
+ggplot(data = datasetfull, aes(x = smoker, y = charges)) + geom_boxplot()
 ```
 
 ```{r}
-ggplot(data = datasetfull, aes(x = region, y = charges)) + geom_point()
+ggplot(data = datasetfull, aes(x = region, y = charges)) + geom_boxplot()
 ```
 
 
@@ -74,4 +74,7 @@ summary(step2)
 ```
 ```{r}
 anova(step1,step2)
+```
+```{r}
+
 ```
