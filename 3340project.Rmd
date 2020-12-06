@@ -75,6 +75,4 @@ summary(step2)
 ```{r}
 anova(step1,step2)
 ```
-```{r}
 
-```
