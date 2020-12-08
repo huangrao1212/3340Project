@@ -17,7 +17,7 @@ pairs(~age+bmi+children+charges,data=datasetfull)
 ```
 
 ```{r}
-ggplot(data = datasetfull, aes(x = sex, y = charges)) + geom_point()
+ggplot(data = datasetfull, aes(x = sex, y = charges)) + geom_boxplot()
 ```
 ```{r}
 ggplot(data = datasetfull, aes(sex))+geom_histogram(stat = "count", fill = c("orange", "blue"))
