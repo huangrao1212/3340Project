@@ -1,6 +1,7 @@
 ```{r}
 install.packages("ggplot2")
 install.packages("olsrr")
+install.packages("plyr")
 ```
 
 ```{r}
@@ -8,6 +9,7 @@ library(readr)
 datasetfull <- read_csv("insurance.csv")
 ```
 ```{r}
+library(plyr)
 keep<-c('age','bmi','children','charges')
 num_data<-subset(datasetfull, select=keep)
 cor(num_data)
@@ -21,8 +23,12 @@ install.packages("tidyverse")
 library(ggplot2)
 ggplot(data = datasetfull, aes(x = sex, y = charges)) + geom_boxplot()
 ```
+```{r}
+ggplot(data = datasetfull, aes(sex))+geom_histogram(stat = "count", fill = c("orange", "blue"))
+```
 
 ```{r}
+
 ggplot(data = datasetfull, aes(x = as.factor(children), y = charges)) + geom_boxplot()
 ```
 
@@ -32,6 +38,22 @@ ggplot(data = datasetfull, aes(x = smoker, y = charges)) + geom_boxplot()
 
 ```{r}
 ggplot(data = datasetfull, aes(x = region, y = charges)) + geom_boxplot()
+```
+```{r}
+bmi_category <- cut(datasetfull$bmi, c(0, 18.5, 24.9, 29.9, 10000), labels = c("Underweight","Healthy weight","Overweight","Obese"), right = FALSE)
+bmi_category <- data.frame((bmi_category))
+bmidata <- cbind(charge = datasetfull$charges, bmi = bmi_category)
+colnames(bmidata) <- c("charge", "bmi")
+ggplot(data = bmidata, aes(x = bmi, y = charge)) + geom_boxplot()
+```
+```{r}
+age_range <- data.frame(ifelse(datasetfull$age < 20, "Minor", "Adult"))
+agedata <- cbind(datasetfull$charges, age_range)
+colnames(agedata) <- c("charge", "age")
+ggplot(data = agedata, aes(x = age, y = charge)) + geom_boxplot()
+```
+```{r}
+  ggplot(agedata, aes(x = age))+geom_histogram(stat="count", fill = c("orange", "blue"))
 ```
 
 
