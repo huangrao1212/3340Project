@@ -5,7 +5,7 @@ install.packages("olsrr")
 
 ```{r}
 library(readr)
-datasetfull <- read_csv("/Users/richard/Documents/study/20fall/3340/project/insurance.csv")
+datasetfull <- read_csv("insurance.csv")
 ```
 ```{r}
 keep<-c('age','bmi','children','charges')
@@ -17,8 +17,6 @@ pairs(~age+bmi+children+charges,data=datasetfull)
 ```
 
 ```{r}
-install.packages("tidyverse")
-library(tidyverse)
 ggplot(data = datasetfull, aes(x = sex, y = charges)) + geom_point()
 ```
 ```{r}
@@ -27,15 +25,15 @@ ggplot(data = datasetfull, aes(sex))+geom_histogram(stat = "count", fill = c("or
 
 ```{r}
 
-ggplot(data = datasetfull, aes(x = children, y = charges)) + geom_point()
+ggplot(data = datasetfull, aes(x = as.factor(children), y = charges)) + geom_boxplot() + labs(x = "Number of Children")
 ```
 
 ```{r}
-ggplot(data = datasetfull, aes(x = smoker, y = charges)) + geom_point()
+ggplot(data = datasetfull, aes(x = smoker, y = charges)) + geom_boxplot()
 ```
 
 ```{r}
-ggplot(data = datasetfull, aes(x = region, y = charges)) + geom_point()
+ggplot(data = datasetfull, aes(x = region, y = charges)) + geom_boxplot()
 ```
 ```{r}
 bmi_category <- cut(datasetfull$bmi, c(0, 18.5, 24.9, 29.9, 10000), labels = c("Underweight","Healthy weight","Overweight","Obese"), right = FALSE)
@@ -96,16 +94,14 @@ anova(step1,step2)
 ```
 ```{r}
 plot(step2)
-'''
-Residuals vs Fitted:
-Looking at the Residuals vs Fitted plot, we can see that the red line is approximately flat, which means that the mean of error is approximately equal to 0.
-Normal Q-Q:
-The residuals are approximately matched to the diagonal line, which means that the residuals are roughly normally distributed. And we can see that both the upper and lower tail are ‘heavier’ (have larger values) than what we would expect under the gauss-markov assumptions. 
-Scale-Location:
-Looking at the Scale-Location plot, we can see that the red line is approximately flat, which means that there is no indication of having non-constant variance.
-Residuals vs Leverage:
-The Residuals vs Leverage plot indicate that there is no evidence of outliers because the “Cook’s distance” dashed curves don’t even appear on the plot. And there exists some leverage points: 1301, 578, 544.
-'''
+# Residuals vs Fitted:
+# Looking at the Residuals vs Fitted plot, we can see that the red line is approximately flat, which means that the mean of error is approximately equal to 0.
+# Normal Q-Q:
+# The residuals are approximately matched to the diagonal line, which means that the residuals are roughly normally distributed. And we can see that both the upper and lower tail are ‘heavier’ (have larger values) than what we would expect under the gauss-markov assumptions. 
+# Scale-Location:
+# Looking at the Scale-Location plot, we can see that the red line is approximately flat, which means that there is no indication of having non-constant variance.
+# Residuals vs Leverage:
+# The Residuals vs Leverage plot indicate that there is no evidence of outliers because the “Cook’s distance” dashed curves don’t even appear on the plot. And there exists some leverage points: 1301, 578, 544.
 ```
 
 ```{r}
