@@ -5,7 +5,7 @@ install.packages("olsrr")
 
 ```{r}
 library(readr)
-datasetfull <- read_csv("insurance.csv")
+datasetfull <- read_csv("/Users/richard/Documents/study/20fall/3340/project/insurance.csv")
 ```
 ```{r}
 keep<-c('age','bmi','children','charges')
@@ -18,20 +18,20 @@ pairs(~age+bmi+children+charges,data=datasetfull)
 
 ```{r}
 install.packages("tidyverse")
-library(ggplot2)
-ggplot(data = datasetfull, aes(x = sex, y = charges)) + geom_boxplot()
+library(tidyverse)
+ggplot(data = datasetfull, aes(x = sex, y = charges)) + geom_point()
 ```
 
 ```{r}
-ggplot(data = datasetfull, aes(x = as.factor(children), y = charges)) + geom_boxplot()
+ggplot(data = datasetfull, aes(x = children, y = charges)) + geom_point()
 ```
 
 ```{r}
-ggplot(data = datasetfull, aes(x = smoker, y = charges)) + geom_boxplot()
+ggplot(data = datasetfull, aes(x = smoker, y = charges)) + geom_point()
 ```
 
 ```{r}
-ggplot(data = datasetfull, aes(x = region, y = charges)) + geom_boxplot()
+ggplot(data = datasetfull, aes(x = region, y = charges)) + geom_point()
 ```
 
 
@@ -61,9 +61,8 @@ datasetfull <- subset(datasetfull, select = -c(sex, region, smoker))
 
 
 ```{r}
-nullmodel<-lm(charges~1,data=datasetfull)
-fullmodel=lm(charges~sex_male+sex_female+region_southwest+region_southeast+region_northwest+region_northeast+age+bmi+children+smoker_yes+smoker_no,data=datasetfull)
-step1=step(fullmodel, direction="backward")
+fullmodel1=lm(charges~region_southwest+region_southeast+region_northwest+region_northeast+age+bmi+children+sex_male+smoker_yes+sex_female+smoker_no,data=datasetfull)
+step1=step(fullmodel1,direction="backward")
 summary(step1)
 ```
 
@@ -75,4 +74,25 @@ summary(step2)
 ```{r}
 anova(step1,step2)
 ```
+```{r}
+plot(step2)
+'''
+Residuals vs Fitted:
+Looking at the Residuals vs Fitted plot, we can see that the red line is approximately flat, which means that the mean of error is approximately equal to 0.
+Normal Q-Q:
+The residuals are approximately matched to the diagonal line, which means that the residuals are roughly normally distributed. And we can see that both the upper and lower tail are ‘heavier’ (have larger values) than what we would expect under the gauss-markov assumptions. 
+Scale-Location:
+Looking at the Scale-Location plot, we can see that the red line is approximately flat, which means that there is no indication of having non-constant variance.
+Residuals vs Leverage:
+The Residuals vs Leverage plot indicate that there is no evidence of outliers because the “Cook’s distance” dashed curves don’t even appear on the plot. And there exists some leverage points: 1301, 578, 544.
+'''
+```
 
+```{r}
+install.packages("MPV")
+install.packages("faraway")
+library(MPV)
+library(faraway)
+vif(step2)
+# As for the multicolinearity, since all the attributes' vif are less than 10, we can conclude that these variables are independent.
+```
