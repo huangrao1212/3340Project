@@ -1,15 +1,29 @@
 ```{r}
 install.packages("ggplot2")
 install.packages("olsrr")
+install.packages("dplyr")
 ```
 
 ```{r}
+library(rlang)
 library(readr)
 library(ggplot2)
+library(dplyr)
+```
+
+
+```{r}
 datasetfull <- read_csv("insurance.csv")
 # one new additional data point
 datasetfull[nrow(datasetfull) + 1,] <- list(22,"female",23.71,0,"no","northeast",5503.7768)
 ```
+
+```{r}
+count(datasetfull, sex)
+count(datasetfull, region)
+count(datasetfull, smoker)
+```
+
 ```{r}
 keep<-c('age','bmi','children','charges')
 num_data<-subset(datasetfull, select=keep)
