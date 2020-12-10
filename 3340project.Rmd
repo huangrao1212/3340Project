@@ -7,6 +7,8 @@ install.packages("olsrr")
 library(readr)
 library(ggplot2)
 datasetfull <- read_csv("insurance.csv")
+# one new additional data point
+datasetfull[nrow(datasetfull) + 1,] <- list(22,"female",23.71,0,"no","northeast",5503.7768)
 ```
 ```{r}
 keep<-c('age','bmi','children','charges')
@@ -54,11 +56,6 @@ ggplot(data = agedata, aes(x = age, y = charge)) + geom_boxplot() + labs(title =
 ```
 ```{r}
   ggplot(agedata, aes(x = age))+geom_histogram(stat="count", fill = "white", color = "grey") + labs(title = "Age distribution")
-```
-
-```{r}
-# one new additional data point
-datasetfull[nrow(datasetfull) + 1,] <- list(22,"female",23.71,0,"no","northeast",5503.7768)
 ```
 
 ```{r}
