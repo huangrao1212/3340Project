@@ -1,3 +1,11 @@
+---
+title: "STAT 3340 - Final Project"
+author: "Yurunyun Wang & Yuqiao Du & Rao Huang & Ruoxin Xu"
+date: "12/1/2020"
+output: pdf_document
+---
+
+#install packages
 ```{r}
 install.packages("ggplot2")
 install.packages("olsrr")
@@ -11,40 +19,43 @@ library(ggplot2)
 library(dplyr)
 ```
 
-
+#import the data from a csv file and add new data point
 ```{r}
 datasetfull <- read_csv("insurance.csv")
 # one new additional data point
 datasetfull[nrow(datasetfull) + 1,] <- list(22,"female",23.71,0,"no","northeast",5503.7768)
 ```
 
+#count the categorical data
 ```{r}
 count(datasetfull, sex)
 count(datasetfull, region)
 count(datasetfull, smoker)
 ```
 
+#calculate the correlation matrix
 ```{r}
 keep<-c('age','bmi','children','charges')
 num_data<-subset(datasetfull, select=keep)
 cor(num_data)
 ```
+
+#draw the scatterplot
 ```{r}
 pairs(~age+bmi+children+charges,data=datasetfull)
 ```
+
+#see the summary imformation of data
 ```{r}
 summary(datasetfull)
 ```
 
+#draw ggplot for categorical data
 ```{r}
 ggplot(data = datasetfull, aes(x = sex, y = charges)) + geom_boxplot() + labs(title = "Charges distribution based on sex")
 ```
-```{r}
-ggplot(data = datasetfull, aes(sex)) + geom_histogram(stat = "count", fill = "white", color = "grey") + labs(title = "Sex distribution")
-```
 
 ```{r}
-
 ggplot(data = datasetfull, aes(x = as.factor(children), y = charges)) + geom_boxplot() + labs(x = "Number of Children") + labs(title = "Charges distribution based on Number of Children")
 ```
 
@@ -62,20 +73,19 @@ bmidata <- cbind(charge = datasetfull$charges, bmi = bmi_category)
 colnames(bmidata) <- c("charge", "bmi")
 ggplot(data = bmidata, aes(x = bmi, y = charge)) + geom_boxplot() + labs(title = "Charges distribution based on bmi class")
 ```
+
 ```{r}
 age_range <- data.frame(ifelse(datasetfull$age < 20, "Minor", "Adult"))
 agedata <- cbind(datasetfull$charges, age_range)
 colnames(agedata) <- c("charge", "age")
 ggplot(data = agedata, aes(x = age, y = charge)) + geom_boxplot() + labs(title = "Charges distribution based on age")
 ```
+
 ```{r}
   ggplot(agedata, aes(x = age))+geom_histogram(stat="count", fill = "white", color = "grey") + labs(title = "Age distribution")
 ```
 
-```{r}
-unique(datasetfull$region)
-```
-
+#set indicator variable
 ```{r}
 datasetfull$sex<-as.factor(datasetfull$sex)
 datasetfull$region<-as.factor(datasetfull$region)
@@ -91,19 +101,21 @@ datasetfull$smoker_no <- ifelse(datasetfull$smoker == "no", 1, 0)
 datasetfull <- subset(datasetfull, select = -c(sex, region, smoker))
 ```
 
-
-
+#the analysis of model without interactions and use backward to obtain the 'best model'
 ```{r}
 fullmodel1=lm(charges~region_southwest+region_southeast+region_northwest+region_northeast+age+bmi+children+sex_male+smoker_yes+sex_female+smoker_no,data=datasetfull)
 step1=step(fullmodel1,direction="backward")
 summary(step1)
 ```
 
+#the analysis of model with interactions and use backward to obtain the 'best model'
 ```{r}
 fullmodel2=lm(charges~region_southwest+region_southeast+region_northwest+region_northeast+age+bmi+children+sex_male*smoker_yes+sex_female*smoker_no+sex_female*smoker_no+sex_male*smoker_yes,data=datasetfull)
 step2=step(fullmodel2,direction="backward")
 summary(step2)
 ```
+
+#estimate the chosen model
 ```{r}
 anova(step1,step2)
 ```
@@ -119,6 +131,7 @@ plot(step2)
 # The Residuals vs Leverage plot indicate that there is no evidence of outliers because the “Cook’s distance” dashed curves don’t even appear on the plot. And there exists some leverage points: 1301, 578, 544.
 ```
 
+#check whether the variables are independent
 ```{r}
 install.packages("MPV")
 install.packages("faraway")
