@@ -100,7 +100,7 @@ summary(step1)
 ```
 
 ```{r}
-fullmodel2=lm(charges~region_southwest+region_southeast+region_northwest+region_northeast+age+bmi+children+sex_male*smoker_yes+sex_female*smoker_no+sex_male*smoker_no+sex_male*smoker_yes,data=datasetfull)
+fullmodel2=lm(charges~region_southwest+region_southeast+region_northwest+region_northeast+age+bmi+children+sex_male*smoker_yes+sex_female*smoker_no+sex_female*smoker_no+sex_male*smoker_yes,data=datasetfull)
 step2=step(fullmodel2,direction="backward")
 summary(step2)
 ```
