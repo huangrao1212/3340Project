@@ -24,7 +24,7 @@ summary(datasetfull)
 ggplot(data = datasetfull, aes(x = sex, y = charges)) + geom_boxplot() + labs(title = "Charges distribution based on sex")
 ```
 ```{r}
-ggplot(data = datasetfull, aes(sex)) + geom_histogram(stat = "count", fill = c("orange", "blue")) + labs(title = "Sex distribution")
+ggplot(data = datasetfull, aes(sex)) + geom_histogram(stat = "count", fill = "white", color = "grey") + labs(title = "Sex distribution")
 ```
 
 ```{r}
@@ -53,7 +53,7 @@ colnames(agedata) <- c("charge", "age")
 ggplot(data = agedata, aes(x = age, y = charge)) + geom_boxplot() + labs(title = "Charges distribution based on age")
 ```
 ```{r}
-  ggplot(agedata, aes(x = age))+geom_histogram(stat="count", fill = c("orange", "blue")) + labs(title = "Age distribution")
+  ggplot(agedata, aes(x = age))+geom_histogram(stat="count", fill = "white", color = "grey") + labs(title = "Age distribution")
 ```
 
 ```{r}
