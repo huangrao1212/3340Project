@@ -5,6 +5,7 @@ install.packages("olsrr")
 
 ```{r}
 library(readr)
+library(ggplot2)
 datasetfull <- read_csv("insurance.csv")
 ```
 ```{r}
@@ -15,45 +16,48 @@ cor(num_data)
 ```{r}
 pairs(~age+bmi+children+charges,data=datasetfull)
 ```
-
 ```{r}
-ggplot(data = datasetfull, aes(x = sex, y = charges)) + geom_boxplot()
-```
-```{r}
-ggplot(data = datasetfull, aes(sex))+geom_histogram(stat = "count", fill = c("orange", "blue"))
+summary(datasetfull)
 ```
 
 ```{r}
-
-ggplot(data = datasetfull, aes(x = as.factor(children), y = charges)) + geom_boxplot() + labs(x = "Number of Children")
+ggplot(data = datasetfull, aes(x = sex, y = charges)) + geom_boxplot() + labs(title = "Charges distribution based on sex")
+```
+```{r}
+ggplot(data = datasetfull, aes(sex)) + geom_histogram(stat = "count", fill = c("orange", "blue")) + labs(title = "Sex distribution")
 ```
 
 ```{r}
-ggplot(data = datasetfull, aes(x = smoker, y = charges)) + geom_boxplot()
+
+ggplot(data = datasetfull, aes(x = as.factor(children), y = charges)) + geom_boxplot() + labs(x = "Number of Children") + labs(title = "Charges distribution based on Number of Children")
 ```
 
 ```{r}
-ggplot(data = datasetfull, aes(x = region, y = charges)) + geom_boxplot()
+ggplot(data = datasetfull, aes(x = smoker, y = charges)) + geom_boxplot() + labs(title = "Charges distribution based on smoker")
+```
+
+```{r}
+ggplot(data = datasetfull, aes(x = region, y = charges)) + geom_boxplot() + labs(title = "Charges distribution based on region")
 ```
 ```{r}
 bmi_category <- cut(datasetfull$bmi, c(0, 18.5, 24.9, 29.9, 10000), labels = c("Underweight","Healthy weight","Overweight","Obese"), right = FALSE)
 bmi_category <- data.frame((bmi_category))
 bmidata <- cbind(charge = datasetfull$charges, bmi = bmi_category)
 colnames(bmidata) <- c("charge", "bmi")
-ggplot(data = bmidata, aes(x = bmi, y = charge)) + geom_boxplot()
+ggplot(data = bmidata, aes(x = bmi, y = charge)) + geom_boxplot() + labs(title = "Charges distribution based on bmi class")
 ```
 ```{r}
 age_range <- data.frame(ifelse(datasetfull$age < 20, "Minor", "Adult"))
 agedata <- cbind(datasetfull$charges, age_range)
 colnames(agedata) <- c("charge", "age")
-ggplot(data = agedata, aes(x = age, y = charge)) + geom_boxplot()
+ggplot(data = agedata, aes(x = age, y = charge)) + geom_boxplot() + labs(title = "Charges distribution based on age")
 ```
 ```{r}
-  ggplot(agedata, aes(x = age))+geom_histogram(stat="count", fill = c("orange", "blue"))
+  ggplot(agedata, aes(x = age))+geom_histogram(stat="count", fill = c("orange", "blue")) + labs(title = "Age distribution")
 ```
 
-
 ```{r}
+# one new additional data point
 datasetfull[nrow(datasetfull) + 1,] <- list(22,"female",23.71,0,"no","northeast",5503.7768)
 ```
 
