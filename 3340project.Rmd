@@ -5,8 +5,8 @@ date: "12/1/2020"
 output: pdf_document
 ---
 
-#install packages
 ```{r}
+#install packages
 install.packages("ggplot2")
 install.packages("olsrr")
 install.packages("dplyr")
@@ -18,40 +18,55 @@ library(readr)
 library(ggplot2)
 library(dplyr)
 ```
+The meaning of each column is listed below:
+age: age of primary beneficiary
 
-#import the data from a csv file and add new data point
+sex: insurance contractor gender, female, male
+
+bmi: Body mass index, providing an understanding of body, weights that are relatively high or low relative to height,
+objective index of body weight (kg / m ^ 2) using the ratio of height to weight, ideally 18.5 to 24.9
+
+children: Number of children covered by health insurance / Number of dependents
+
+smoker: Smoking
+
+region: the beneficiary's residential area in the US, northeast, southeast, southwest, northwest.
+
+charges: Individual medical costs billed by health insurance
 ```{r}
+#import the data from a csv file and add new data point
 datasetfull <- read_csv("insurance.csv")
 # one new additional data point
 datasetfull[nrow(datasetfull) + 1,] <- list(22,"female",23.71,0,"no","northeast",5503.7768)
 ```
 
-#count the categorical data
 ```{r}
+#count the categorical data
 count(datasetfull, sex)
 count(datasetfull, region)
 count(datasetfull, smoker)
 ```
 
-#calculate the correlation matrix
 ```{r}
+#calculate the correlation matrix
 keep<-c('age','bmi','children','charges')
 num_data<-subset(datasetfull, select=keep)
 cor(num_data)
 ```
 
-#draw the scatterplot
 ```{r}
+#draw the scatterplot
 pairs(~age+bmi+children+charges,data=datasetfull)
 ```
 
-#see the summary imformation of data
 ```{r}
+#see the summary imformation of data
 summary(datasetfull)
 ```
 
-#draw ggplot for categorical data
+
 ```{r}
+#draw ggplot for categorical data
 ggplot(data = datasetfull, aes(x = sex, y = charges)) + geom_boxplot() + labs(title = "Charges distribution based on sex")
 ```
 
@@ -85,8 +100,8 @@ ggplot(data = agedata, aes(x = age, y = charge)) + geom_boxplot() + labs(title =
   ggplot(agedata, aes(x = age))+geom_histogram(stat="count", fill = "white", color = "grey") + labs(title = "Age distribution")
 ```
 
-#set indicator variable
 ```{r}
+#set indicator variable
 datasetfull$sex<-as.factor(datasetfull$sex)
 datasetfull$region<-as.factor(datasetfull$region)
 datasetfull$smoker<-as.factor(datasetfull$smoker)
@@ -101,8 +116,8 @@ datasetfull$smoker_no <- ifelse(datasetfull$smoker == "no", 1, 0)
 datasetfull <- subset(datasetfull, select = -c(sex, region, smoker))
 ```
 
-#the analysis of model without interactions and use backward to obtain the 'best model'
 ```{r}
+#the analysis of model without interactions and use backward to obtain the 'best model'
 fullmodel1=lm(charges~region_southwest+region_southeast+region_northwest+region_northeast+age+bmi+children+sex_male+smoker_yes+sex_female+smoker_no,data=datasetfull)
 step1=step(fullmodel1,direction="backward")
 summary(step1)
@@ -110,6 +125,7 @@ summary(step1)
 
 #the analysis of model with interactions and use backward to obtain the 'best model'
 ```{r}
+#the analysis of model with interactions and use backward to obtain the 'best model'
 fullmodel2=lm(charges~region_southwest+region_southeast+region_northwest+region_northeast+age+bmi+children+sex_male*smoker_yes+sex_female*smoker_no+sex_female*smoker_no+sex_male*smoker_yes,data=datasetfull)
 step2=step(fullmodel2,direction="backward")
 summary(step2)
@@ -117,7 +133,11 @@ summary(step2)
 
 #estimate the chosen model
 ```{r}
+#estimate the chosen model
 anova(step1,step2)
+```
+```{r}
+anova(step2)
 ```
 ```{r}
 plot(step2)
